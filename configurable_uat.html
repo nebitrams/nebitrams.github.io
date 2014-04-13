@@ -24,10 +24,10 @@
         <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
             <legend>Choose your Chinese Font:</legend>
-            <input type="radio" name="font-choice" id="traditional-font" value="traditional-font"/>
+            <input type="radio" name="fontChoice" id="traditional-font" value="traditional-font"/>
             <label for="traditional-font">繁体</label>
 
-            <input type="radio" name="font-choice" id="simplified-font" value="simplified-font"/>
+            <input type="radio" name="fontChoice" id="simplified-font" value="simplified-font"/>
             <label for="simplified-font">简体</label>
             </fieldset>
           </div>
@@ -64,11 +64,11 @@
       }
 
       function saveOptions() {
-        var font-choice-group = document.getElementsByName("font-choice");
+        var fontChoiceGroup = document.getElementsByName('fontChoice');
 
         var options = {
-          'simplified-chinese': $("#simplified-chinese").val()
-          'font-choice': getCheckedValue(font-choice-group)
+          'simplified-chinese': $("#simplified-chinese").val(),
+          'font-choice': getCheckedValue(fontChoiceGroup)
         }
         return options;
       }
@@ -76,6 +76,8 @@
       $().ready(function() {
         $("#b-cancel").click(function() {
           console.log("Cancel");
+          var fontChoiceGroup = document.getElementsByName('fontChoice');
+          alert(getCheckedValue(fontChoiceGroup));
           document.location = "pebblejs://close";
         });
 

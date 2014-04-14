@@ -129,7 +129,9 @@
         }
 
         $(":radio").on("change",function() {
-          dictionary[$(this).attr("id")] = this.checked;
+          //dictionary[$(this).attr("id")] = this.checked;
+          var fontIndexGroup = document.getElementsByName('font-index');
+          dictionary[$(this).attr("id")] = getCheckedValue(fontIndexGroup);
           localStorage["dictionary"] = JSON.stringify(dictionary);
         });
 

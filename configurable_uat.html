@@ -14,6 +14,14 @@
       <div data-role="content">
 
         <div data-role="fieldcontain">
+          <label for="simplified-chinese">Chinese Character:</label>
+          <select name="simplified-chinese" id="simplified-chinese" data-role="slider">
+            <option value="off">繁体</option>
+            <option value="on">简体</option>
+          </select>
+        </div>
+
+        <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
             <legend>Choose your Chinese Font:</legend>
             <input type="radio" name="font-index" id="traditional-font" value="traditional-font"/>
@@ -79,6 +87,7 @@
         var fontIndexGroup = document.getElementsByName('font-index');
 
         var options = {
+          'simplified-chinese': $("#simplified-chinese").val(),
           'font-index': getCheckedValue(fontIndexGroup)
         }
         return options;
@@ -109,16 +118,7 @@
               /* Option */
             switch(option) {
               case "font-index":
-                var chosenFont;
-                if (dictionary[option] == 0) {
-                  chosenFont = "traditional-font";
-                } else {
-                  chosenFont = "simplified-font";
-                }
-                
-                var fontIndexGroup = document.getElementsByName('font-index');
-                setCheckedValue(fontIndexGroup, chosenFont);
-                //$('#' + option).prop("checked",dictionary[option]);
+                $('#' + option).prop("checked",dictionary[option]);
                 
                 break;
               default:
@@ -129,9 +129,7 @@
         }
 
         $(":radio").on("change",function() {
-          //dictionary[$(this).attr("id")] = this.checked;
-          var fontIndexGroup = document.getElementsByName('font-index');
-          dictionary[$(this).attr("id")] = getCheckedValue(fontIndexGroup);
+          dictionary[$(this).attr("id")] = this.checked;
           localStorage["dictionary"] = JSON.stringify(dictionary);
         });
 

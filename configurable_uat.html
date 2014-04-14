@@ -14,14 +14,6 @@
       <div data-role="content">
 
         <div data-role="fieldcontain">
-          <label for="simplified-chinese">Chinese Character:</label>
-          <select name="simplified-chinese" id="simplified-chinese" data-role="slider">
-            <option value="off">繁体</option>
-            <option value="on">简体</option>
-          </select>
-        </div>
-
-        <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
             <legend>Choose your Chinese Font:</legend>
             <input type="radio" name="font-index" id="traditional-font" value="traditional-font"/>
@@ -87,7 +79,6 @@
         var fontIndexGroup = document.getElementsByName('font-index');
 
         var options = {
-          'simplified-chinese': $("#simplified-chinese").val(),
           'font-index': getCheckedValue(fontIndexGroup)
         }
         return options;

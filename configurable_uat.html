@@ -24,10 +24,10 @@
         <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
             <legend>Choose your Chinese Font:</legend>
-            <input type="radio" name="fontChoice" id="traditional-font" value="traditional-font"/>
+            <input type="radio" name="font-index" id="traditional-font" value="traditional-font"/>
             <label for="traditional-font">繁体</label>
 
-            <input type="radio" name="fontChoice" id="simplified-font" value="simplified-font"/>
+            <input type="radio" name="font-index" id="simplified-font" value="simplified-font"/>
             <label for="simplified-font">简体</label>
             </fieldset>
           </div>
@@ -64,16 +64,54 @@
       }
 
       function saveOptions() {
-        var fontChoiceGroup = document.getElementsByName('fontChoice');
+        var fontIndexGroup = document.getElementsByName('font-index');
 
         var options = {
           'simplified-chinese': $("#simplified-chinese").val(),
-          'font-index': getCheckedValue(fontChoiceGroup)
+          'font-index': getCheckedValue(fontIndexGroup)
         }
         return options;
       }
 
       $().ready(function() {
+        window.applicationCache.addEventListener("updateready",onUpdateReady);
+
+        function onUpdateReady () {
+          if(window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+            window.location.reload();
+          }
+        } //onUpdateReady
+
+        var dictionary;
+        try {
+          dictionary = JSON.parse(localStorage["dictionary"]);
+          if(!dictionary.hasOwnProperty("font-index")) {
+            dictionary["font-index"] = "traditional-font";
+          }
+        } catch(x) {
+          dictionary = {
+            "font-index": "traditional-font"
+          };
+        }
+        for(option in dictionary) {
+          if(dictionary[option]) {
+              /* Option */
+            switch(option) {
+              case "font-index":
+                $('#' + option).prop("checked",dictionary[option]);
+                break;
+              default:
+                $('#' + option).val(dictionary[option]);
+                break;
+            }
+          }
+        }
+
+        $(":radio").on("change",function() {
+          dictionary[$(this).attr("id")] = this.checked;
+          localStorage["dictionary"] = JSON.stringify(dictionary);
+        });
+
         $("#b-cancel").click(function() {
           console.log("Cancel");
           document.location = "pebblejs://close";

@@ -68,7 +68,7 @@
 
         var options = {
           'simplified-chinese': $("#simplified-chinese").val(),
-          'font-choice': getCheckedValue(fontChoiceGroup)
+          'font-index': getCheckedValue(fontChoiceGroup)
         }
         return options;
       }
@@ -76,8 +76,6 @@
       $().ready(function() {
         $("#b-cancel").click(function() {
           console.log("Cancel");
-          var fontChoiceGroup = document.getElementsByName('fontChoice');
-          alert(getCheckedValue(fontChoiceGroup));
           document.location = "pebblejs://close";
         });
 

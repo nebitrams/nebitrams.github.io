@@ -55,26 +55,6 @@
 	return "";
       }
 
-      // set the radio button with the given value as being checked
-      // do nothing if there are no radio buttons
-      // if the given value does not exist, all the radio buttons
-      // are reset to unchecked
-      function setCheckedValue(radioObj, newValue) {
-	if(!radioObj)
-		return;
-	var radioLength = radioObj.length;
-	if(radioLength == undefined) {
-		radioObj.checked = (radioObj.value == newValue.toString());
-		return;
-	}
-	for(var i = 0; i < radioLength; i++) {
-		radioObj[i].checked = false;
-		if(radioObj[i].value == newValue.toString()) {
-			radioObj[i].checked = true;
-		}
-	}
-      }
-
       function saveOptions() {
         var fontIndexGroup = document.getElementsByName('font-index');
 
@@ -112,10 +92,6 @@
                 // radio button id must be the same as font name
                 $('#' + dictionary[option]).prop("checked",true).checkboxradio("refresh");
 
-                //$('#' + option).prop("checked",dictionary[option]);
-                //var fontIndexGroup = document.getElementsByName('font-index');
-                //setCheckedValue(fontIndexGroup,"simplified-font");
-                
                 break;
               default:
                 //$('#' + option).val(dictionary[option]);
@@ -125,7 +101,7 @@
         }
 
         $(":radio").on("change",function() {
-          //dictionary[$(this).attr("id")] = this.checked;
+          // store the selected font in dictionary
           var fontIndexGroup = document.getElementsByName('font-index');
           dictionary[$(this).attr("name")] = getCheckedValue(fontIndexGroup);
           localStorage["dictionary"] = JSON.stringify(dictionary);

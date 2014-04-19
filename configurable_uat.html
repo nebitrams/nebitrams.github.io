@@ -16,10 +16,10 @@
         <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
             <legend>Choose your Chinese Font:</legend>
-            <input type="radio" name="font-index" id="traditional-font" value="traditional-font"/>
+            <input type="radio" name="font-name" id="traditional-font" value="traditional-font"/>
             <label for="traditional-font">繁体</label>
 
-            <input type="radio" name="font-index" id="simplified-font" value="simplified-font"/>
+            <input type="radio" name="font-name" id="simplified-font" value="simplified-font"/>
             <label for="simplified-font">简体</label>
             </fieldset>
           </div>
@@ -56,10 +56,10 @@
       }
 
       function saveOptions() {
-        var fontIndexGroup = document.getElementsByName('font-index');
+        var fontIndexGroup = document.getElementsByName('font-name');
 
         var options = {
-          'font-index': getCheckedValue(fontIndexGroup)
+          'font-name': getCheckedValue(fontIndexGroup)
         }
         return options;
       }
@@ -76,19 +76,19 @@
         var dictionary;
         try {
           dictionary = JSON.parse(localStorage["dictionary"]);
-          if(!dictionary.hasOwnProperty("font-index")) {
-            dictionary["font-index"] = "traditional-font";
+          if(!dictionary.hasOwnProperty("font-name")) {
+            dictionary["font-name"] = "traditional-font";
           }
         } catch(x) {
           dictionary = {
-            "font-index": "traditional-font"
+            "font-name": "traditional-font"
           };
         }
         for(option in dictionary) {
           if(dictionary[option]) {
               /* Option */
             switch(option) {
-              case "font-index":
+              case "font-name":
                 // radio button id must be the same as font name
                 $('#' + dictionary[option]).prop("checked",true).checkboxradio("refresh");
 
@@ -102,7 +102,7 @@
 
         $(":radio").on("change",function() {
           // store the selected font in dictionary
-          var fontIndexGroup = document.getElementsByName('font-index');
+          var fontIndexGroup = document.getElementsByName('font-name');
           dictionary[$(this).attr("name")] = getCheckedValue(fontIndexGroup);
           localStorage["dictionary"] = JSON.stringify(dictionary);
         });

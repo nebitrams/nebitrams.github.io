@@ -25,6 +25,18 @@
           </div>
         </div>
 
+        <div data-role="fieldcontain">
+          <fieldset data-role="controlgroup">
+            <legend>Choose optional features:</legend>
+            <input type="checkbox" name="show-battery" id="show-battery" class="custom" />
+            <label for="show-battery">Show Battery Indicator</label>
+
+            <input type="checkbox" name="show-bluetooth" id="show-bluetooth" class="custom" />
+            <label for="show-bluetooth">Show Bluetooth Indicator</label>
+
+          </fieldset>
+        </div>
+
         <div class="ui-body ui-body-b">
           <fieldset class="ui-grid-a">
               <div class="ui-block-a"><button type="submit" data-theme="d" id="b-cancel">Cancel</button></div>
@@ -59,7 +71,9 @@
         var fontIndexGroup = document.getElementsByName('font-name');
 
         var options = {
-          'font-name': getCheckedValue(fontIndexGroup)
+          'font-name': getCheckedValue(fontIndexGroup),
+          'show-battery' : $("#show-battery").is(':checked'),
+          'show-bluetooth' : $("#show-bluetooth").is(':checked')
         }
         return options;
       }
@@ -78,10 +92,14 @@
           dictionary = JSON.parse(localStorage["dictionary"]);
           if(!dictionary.hasOwnProperty("font-name")) {
             dictionary["font-name"] = "traditional-font";
+            dictionary["show-battery"] = false;
+            dictionary["show-bluetooth"] = false; 
           }
         } catch(x) {
           dictionary = {
-            "font-name": "traditional-font"
+            "font-name": "traditional-font",
+            "show-battery" : false,
+            "show-bluetooth" : false
           };
         }
         for(option in dictionary) {
@@ -93,6 +111,13 @@
                 $('#' + dictionary[option]).prop("checked",true).checkboxradio("refresh");
 
                 break;
+
+              case "show-battery":
+              case "show-bluetooth":
+                // checkbox
+                $('#' + option).prop("checked",dictionary[option]).checkboxradio("refresh");
+                break;
+
               default:
                 //$('#' + option).val(dictionary[option]);
                 break;
@@ -104,6 +129,11 @@
           // store the selected font in dictionary
           var fontIndexGroup = document.getElementsByName('font-name');
           dictionary[$(this).attr("name")] = getCheckedValue(fontIndexGroup);
+          localStorage["dictionary"] = JSON.stringify(dictionary);
+        });
+
+        $(":checkbox").on("change",function() {
+          dictionary[$(this).attr("id")] = this.checked;
           localStorage["dictionary"] = JSON.stringify(dictionary);
         });
 

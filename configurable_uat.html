@@ -15,7 +15,7 @@
 
         <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
-            <legend>Choose your Chinese Font:</legend>
+            <legend>Choose Chinese font:</legend>
             <input type="radio" name="font-name" id="traditional-font" value="traditional-font"/>
             <label for="traditional-font">繁体</label>
 
@@ -33,6 +33,15 @@
 
             <input type="checkbox" name="show-bluetooth" id="show-bluetooth" class="custom" />
             <label for="show-bluetooth">Show Bluetooth Indicator</label>
+
+          </fieldset>
+        </div>
+
+        <div data-role="fieldcontain">
+          <fieldset data-role="controlgroup">
+            <legend>Choose background color:</legend>
+            <input type="checkbox" name="invert-colors" id="invert-colors" class="custom" />
+            <label for="invert-colors">Invert colors</label>
 
           </fieldset>
         </div>
@@ -74,6 +83,7 @@
           'font-name': getCheckedValue(fontIndexGroup),
           'show-battery' : $("#show-battery").is(':checked'),
           'show-bluetooth' : $("#show-bluetooth").is(':checked')
+          'invert-colors' : $("#invert-colors").is(':checked')
         }
         return options;
       }
@@ -94,12 +104,14 @@
             dictionary["font-name"] = "traditional-font";
             dictionary["show-battery"] = false;
             dictionary["show-bluetooth"] = false; 
+            dictionary["invert-colors"] = false; 
           }
         } catch(x) {
           dictionary = {
             "font-name": "traditional-font",
             "show-battery" : false,
-            "show-bluetooth" : false
+            "show-bluetooth" : false,
+            "invert-colors" : false
           };
         }
         for(option in dictionary) {
@@ -114,6 +126,7 @@
 
               case "show-battery":
               case "show-bluetooth":
+              case "invert-colors":
                 // checkbox
                 $('#' + option).prop("checked",dictionary[option]).checkboxradio("refresh");
                 break;

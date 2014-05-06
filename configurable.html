@@ -14,11 +14,36 @@
       <div data-role="content">
 
         <div data-role="fieldcontain">
-          <label for="simplified-chinese">Chinese Character:</label>
-          <select name="simplified-chinese" id="simplified-chinese" data-role="slider">
-            <option value="off">繁体</option>
-            <option value="on">简体</option>
-          </select>
+          <fieldset data-role="controlgroup">
+            <legend>Choose Chinese font:</legend>
+            <input type="radio" name="font-name" id="traditional-font" value="traditional-font"/>
+            <label for="traditional-font">繁体</label>
+
+            <input type="radio" name="font-name" id="simplified-font" value="simplified-font"/>
+            <label for="simplified-font">简体</label>
+            </fieldset>
+          </div>
+        </div>
+
+        <div data-role="fieldcontain">
+          <fieldset data-role="controlgroup">
+            <legend>Choose optional features:</legend>
+            <input type="checkbox" name="show-battery" id="show-battery" class="custom" />
+            <label for="show-battery">Show Battery Indicator</label>
+
+            <input type="checkbox" name="show-bluetooth" id="show-bluetooth" class="custom" />
+            <label for="show-bluetooth">Show Bluetooth Indicator</label>
+
+          </fieldset>
+        </div>
+
+        <div data-role="fieldcontain">
+          <fieldset data-role="controlgroup">
+            <legend>Choose background color:</legend>
+            <input type="checkbox" name="invert-colors" id="invert-colors" class="custom" />
+            <label for="invert-colors">Invert colors</label>
+
+          </fieldset>
         </div>
 
         <div class="ui-body ui-body-b">
@@ -31,14 +56,100 @@
       </div>
     </div>
     <script>
+      // return the value of the radio button that is checked
+      // return an empty string if none are checked, or
+      // there are no radio buttons
+      function getCheckedValue(radioObj) {
+	if(!radioObj)
+		return "";
+	var radioLength = radioObj.length;
+	if(radioLength == undefined)
+		if(radioObj.checked)
+			return radioObj.value;
+		else
+			return "";
+	for(var i = 0; i < radioLength; i++) {
+		if(radioObj[i].checked) {
+			return radioObj[i].value;
+		}
+	}
+	return "";
+      }
+
       function saveOptions() {
+        var fontIndexGroup = document.getElementsByName('font-name');
+
         var options = {
-          'simplified-chinese': $("#simplified-chinese").val()
+          'font-name': getCheckedValue(fontIndexGroup),
+          'show-battery' : $("#show-battery").is(':checked'),
+          'show-bluetooth' : $("#show-bluetooth").is(':checked'),
+          'invert-colors' : $("#invert-colors").is(':checked')
         }
         return options;
       }
 
       $().ready(function() {
+        window.applicationCache.addEventListener("updateready",onUpdateReady);
+
+        function onUpdateReady () {
+          if(window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+            window.location.reload();
+          }
+        } //onUpdateReady
+
+        var dictionary;
+        try {
+          dictionary = JSON.parse(localStorage["dictionary"]);
+          if(!dictionary.hasOwnProperty("font-name")) {
+            dictionary["font-name"] = "traditional-font";
+            dictionary["show-battery"] = false;
+            dictionary["show-bluetooth"] = false; 
+            dictionary["invert-colors"] = false; 
+          }
+        } catch(x) {
+          dictionary = {
+            "font-name": "traditional-font",
+            "show-battery" : false,
+            "show-bluetooth" : false,
+            "invert-colors" : false
+          };
+        }
+        for(option in dictionary) {
+          if(dictionary[option]) {
+              /* Option */
+            switch(option) {
+              case "font-name":
+                // radio button id must be the same as font name
+                $('#' + dictionary[option]).prop("checked",true).checkboxradio("refresh");
+
+                break;
+
+              case "show-battery":
+              case "show-bluetooth":
+              case "invert-colors":
+                // checkbox
+                $('#' + option).prop("checked",dictionary[option]).checkboxradio("refresh");
+                break;
+
+              default:
+                //$('#' + option).val(dictionary[option]);
+                break;
+            }
+          }
+        }
+
+        $(":radio").on("change",function() {
+          // store the selected font in dictionary
+          var fontIndexGroup = document.getElementsByName('font-name');
+          dictionary[$(this).attr("name")] = getCheckedValue(fontIndexGroup);
+          localStorage["dictionary"] = JSON.stringify(dictionary);
+        });
+
+        $(":checkbox").on("change",function() {
+          dictionary[$(this).attr("id")] = this.checked;
+          localStorage["dictionary"] = JSON.stringify(dictionary);
+        });
+
         $("#b-cancel").click(function() {
           console.log("Cancel");
           document.location = "pebblejs://close";

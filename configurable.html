@@ -34,6 +34,9 @@
             <input type="checkbox" name="show-bluetooth" id="show-bluetooth" class="custom" />
             <label for="show-bluetooth">Show Bluetooth Indicator</label>
 
+            <input type="checkbox" name="show-digital-time" id="show-digital-time" class="custom" />
+            <label for="show-digital-time">Show Digital Time</label>
+
           </fieldset>
         </div>
 
@@ -83,7 +86,8 @@
           'font-name': getCheckedValue(fontIndexGroup),
           'show-battery' : $("#show-battery").is(':checked'),
           'show-bluetooth' : $("#show-bluetooth").is(':checked'),
-          'invert-colors' : $("#invert-colors").is(':checked')
+          'invert-colors' : $("#invert-colors").is(':checked'),
+          'show-digital-time' : $("#show-digital-time").is(':checked')
         }
         return options;
       }
@@ -105,13 +109,15 @@
             dictionary["show-battery"] = false;
             dictionary["show-bluetooth"] = false; 
             dictionary["invert-colors"] = false; 
+            dictionary["show-digital-time"] = false; 
           }
         } catch(x) {
           dictionary = {
             "font-name": "traditional-font",
             "show-battery" : false,
             "show-bluetooth" : false,
-            "invert-colors" : false
+            "invert-colors" : false,
+            "show-digital-time" : false
           };
         }
         for(option in dictionary) {
@@ -127,6 +133,7 @@
               case "show-battery":
               case "show-bluetooth":
               case "invert-colors":
+              case "show-digital-time":
                 // checkbox
                 $('#' + option).prop("checked",dictionary[option]).checkboxradio("refresh");
                 break;
